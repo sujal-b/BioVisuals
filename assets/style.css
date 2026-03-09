@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&display=swap');
+
+body {
+    font-family: 'Space Grotesk', sans-serif;
+    background: radial-gradient(circle at 10% 20%, rgb(0, 0, 0) 0%, rgb(18, 19, 21) 90%);
+    color: #e0e0e0;
+    min-height: 100vh;
+}
+
+.glass-card {
+    background: rgba(20, 20, 25, 0.45);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    border-radius: 16px;
+    transition: all 0.3s ease;
+}
+
+.glass-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(0, 255, 255, 0.3);
+    box-shadow: 0 12px 40px 0 rgba(0, 255, 255, 0.1);
+}
+
+.neon-text-info {
+    color: #00ffff;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.3), 0 0 20px rgba(0, 255, 255, 0.2);
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.neon-text-success {
+    color: #00ffaa;
+    text-shadow: 0 0 10px rgba(0, 255, 170, 0.3), 0 0 20px rgba(0, 255, 170, 0.2);
+    font-weight: 600;
+}
+
+.neon-button {
+    background: linear-gradient(90deg, #00ffff 0%, #0088ff 100%);
+    border: none;
+    color: #000;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 10px 20px;
+}
+
+.neon-button:hover {
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.6);
+    transform: scale(1.02);
+    color: #000;
+}
+
+.custom-input {
+    background: rgba(0, 0, 0, 0.3) !important;
+    border: 1px solid rgba(0, 255, 255, 0.2) !important;
+    color: #fff !important;
+    border-radius: 8px !important;
+}
+
+.custom-input:focus {
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.3) !important;
+    border-color: #00ffff !important;
+}
+
+.metric-card {
+    background: rgba(10, 10, 15, 0.5);
+    border-radius: 12px;
+    padding: 15px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    height: 100%;
+    transition: all 0.3s ease;
+}
+
+.metric-card:hover {
+    border-color: rgba(0, 255, 170, 0.4);
+    background: rgba(20, 20, 25, 0.7);
+}
+
+.metric-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #00ffaa;
+    margin-bottom: 0;
+}
+
+.metric-label {
+    font-size: 0.8rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.image-container {
+    background: #fff;
+    border-radius: 8px;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+}
+
+.nav-brand-glow {
+    font-weight: 800;
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    background: -webkit-linear-gradient(#00ffff, #00ffaa);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
