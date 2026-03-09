@@ -1,6 +1,6 @@
 dash
 dash-bootstrap-components
-rdkit
+rdkit-pypi
 openai
 plotly
 gunicorn
