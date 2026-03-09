@@ -10,8 +10,8 @@ import base64
 from io import BytesIO
 
 # --- CONFIG & SECURE API HANDLING ---
-# Hardcoded for local testing to avoid 'OPENROUTER_API_KEY' system variable overrides
-API_KEY = "sk-or-v1-95437b44bbdc522c2e201a4"
+# In Vercel, set 'OPENROUTER_API_KEY' in the Environment Variables dashboard
+API_KEY = os.getenv("OPENROUTER_API_KEY", "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")
 MODEL = "nvidia/nemotron-3-nano-30b-a3b:free"
 client = OpenAI(base_url="https://openrouter.ai/api/v1", api_key=API_KEY)
 
