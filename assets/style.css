@@ -96,13 +96,15 @@ body {
 }
 
 .image-container {
-    background: #fff;
-    border-radius: 8px;
+    background: rgba(14, 14, 19, 0.9);
+    border-radius: 12px;
     padding: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 200px;
+    border: 1px solid rgba(0, 255, 170, 0.15);
+    box-shadow: 0 0 20px rgba(0, 255, 170, 0.05);
 }
 
 .nav-brand-glow {

@@ -11,7 +11,7 @@ from io import BytesIO
 
 # --- CONFIG & SECURE API HANDLING ---
 # In Vercel, set 'OPENROUTER_API_KEY' in the Environment Variables dashboard
-API_KEY = os.getenv("OPENROUTER_API_KEY", "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")
+API_KEY = os.getenv("OPENROUTER_API_KEY", "sk-or-v1-95437b44f489237bc4bbdc522c2e201a4")
 MODEL = "nvidia/nemotron-3-nano-30b-a3b:free"
 client = OpenAI(base_url="https://openrouter.ai/api/v1", api_key=API_KEY)
 
@@ -146,7 +146,7 @@ app.layout = dbc.Container([
 
 # --- CREATIVE ANALYTICS ---
 def create_radar(mol):
-    """Generates a Lipinski Rule radar chart."""
+    """Generates a Lipinski Rule radar chart with dark neon styling."""
     mw = min(Descriptors.MolWt(mol) / 500, 1.2)
     logp = min(abs(Descriptors.MolLogP(mol)) / 5, 1.2)
     hbd = min(Descriptors.NumHDonors(mol) / 5, 1.2)
@@ -156,12 +156,30 @@ def create_radar(mol):
         r=[mw, logp, hbd, hba, mw],
         theta=['MolWt','LogP','H-Donors','H-Acceptors', 'MolWt'],
         fill='toself',
-        line_color='#00bc8c'
+        fillcolor='rgba(0, 255, 170, 0.12)',
+        line=dict(color='#00ffaa', width=2.5),
+        marker=dict(color='#00ffaa', size=6, line=dict(color='#ffffff', width=1))
     ))
     fig.update_layout(
-        polar=dict(radialaxis=dict(visible=True, range=[0, 1.2])),
-        showlegend=False, paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',
-        font_color="white", margin=dict(l=40, r=40, t=20, b=20)
+        polar=dict(
+            bgcolor='rgba(10, 10, 15, 0.6)',
+            radialaxis=dict(
+                visible=True, range=[0, 1.2],
+                gridcolor='rgba(0, 255, 255, 0.1)',
+                linecolor='rgba(0, 255, 255, 0.15)',
+                tickfont=dict(color='rgba(255,255,255,0.5)', size=10),
+            ),
+            angularaxis=dict(
+                gridcolor='rgba(0, 255, 255, 0.1)',
+                linecolor='rgba(0, 255, 255, 0.2)',
+                tickfont=dict(color='#00ffaa', size=12),
+            )
+        ),
+        showlegend=False,
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)',
+        font_color='#e0e0e0',
+        margin=dict(l=40, r=40, t=20, b=20)
     )
     return fig
 
@@ -199,10 +217,29 @@ def generate_3d_html(smiles):
 </html>"""
 
 def generate_2d_img(mol):
-    """Generates base64 encoded 2D structure image."""
-    img = Draw.MolToImage(mol, size=(400, 300))
+    """Generates base64 encoded 2D structure image with dark background."""
+    from PIL import Image, ImageDraw as PILDraw
+    # Render molecule at higher resolution for quality
+    mol_img = Draw.MolToImage(mol, size=(600, 450))
+    # Create dark background canvas
+    dark_bg = Image.new('RGB', mol_img.size, (14, 14, 19))
+    # Convert molecule image to RGBA for proper compositing
+    mol_rgba = mol_img.convert('RGBA')
+    pixels = mol_rgba.load()
+    # Replace white/light background with transparency
+    for y in range(mol_rgba.height):
+        for x in range(mol_rgba.width):
+            r, g, b, a = pixels[x, y]
+            # If pixel is white-ish (background), make transparent
+            if r > 200 and g > 200 and b > 200:
+                pixels[x, y] = (0, 0, 0, 0)
+            # Darken black atoms slightly to a bright gray/cyan tint for visibility
+            elif r < 50 and g < 50 and b < 50:
+                pixels[x, y] = (200, 230, 240, a)
+    dark_bg.paste(mol_rgba, (0, 0), mol_rgba)
+    # Add subtle border glow effect
     buffered = BytesIO()
-    img.save(buffered, format="PNG")
+    dark_bg.save(buffered, format="PNG")
     img_str = base64.b64encode(buffered.getvalue()).decode()
     return f"data:image/png;base64,{img_str}"
 
