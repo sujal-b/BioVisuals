@@ -9,8 +9,6 @@ import dash_bootstrap_components as dbc
 import base64
 from io import BytesIO
 
-# --- CONFIG & SECURE API HANDLING ---
-# In Vercel, set 'OPENROUTER_API_KEY' in the Environment Variables dashboard
 API_KEY = os.getenv("OPENROUTER_API_KEY", "sk-or-v1-95437b44f489237bc4bbdc522c2e201a4")
 MODEL = "nvidia/nemotron-3-nano-30b-a3b:free"
 client = OpenAI(base_url="https://openrouter.ai/api/v1", api_key=API_KEY)
@@ -21,9 +19,8 @@ FALLBACK_MOLECULES = {
     "vanillin": "O=Cc1cc(OC)c(O)cc1",
 }
 
-# --- THE APP ---
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.CYBORG])
-server = app.server  # CRITICAL: This allows Vercel to find the Flask instance
+server = app.server
 
 app.layout = dbc.Container([
     dbc.Navbar(
@@ -144,7 +141,6 @@ app.layout = dbc.Container([
     ])
 ], fluid=True, className="p-4")
 
-# --- CREATIVE ANALYTICS ---
 def create_radar(mol):
     """Generates a Lipinski Rule radar chart with dark neon styling."""
     mw = min(Descriptors.MolWt(mol) / 500, 1.2)
@@ -226,18 +222,14 @@ def generate_2d_img(mol):
     # Convert molecule image to RGBA for proper compositing
     mol_rgba = mol_img.convert('RGBA')
     pixels = mol_rgba.load()
-    # Replace white/light background with transparency
     for y in range(mol_rgba.height):
         for x in range(mol_rgba.width):
             r, g, b, a = pixels[x, y]
-            # If pixel is white-ish (background), make transparent
             if r > 200 and g > 200 and b > 200:
                 pixels[x, y] = (0, 0, 0, 0)
-            # Darken black atoms slightly to a bright gray/cyan tint for visibility
             elif r < 50 and g < 50 and b < 50:
                 pixels[x, y] = (200, 230, 240, a)
     dark_bg.paste(mol_rgba, (0, 0), mol_rgba)
-    # Add subtle border glow effect
     buffered = BytesIO()
     dark_bg.save(buffered, format="PNG")
     img_str = base64.b64encode(buffered.getvalue()).decode()
